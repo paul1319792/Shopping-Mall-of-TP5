@@ -1,0 +1,75 @@
+<?php
+//循环取出的属性
+foreach($data as $v){
+	//判断是否是单选属性
+	if($v['attr_type']==1){
+		//单选属性 前面添加 '[+]'  
+		//判断属性值的录入方式是否手工录入（input），还是列表选择(select)
+		if($v['attr_input_type']==0){
+			//生成一个input框
+			echo "<div class='row cl'>
+					<label class='form-label col-xs-4 col-sm-2'><a>[+]</a>".$v['attr_name']."</label>
+					<div class='formControls col-xs-8 col-sm-9'>
+						<input type='text' class='input-text' value='' id='' name='attr[".$v['id']."][]' >
+					</div>
+				</div>";
+		}else {
+			//生成一个select框
+			//取出列表值
+			$attr_values = explode(',',$v['attr_value']);
+			echo "<div class='row cl'>
+		<label class='form-label col-xs-4 col-sm-2'><a href='javascript:' onclick='cloneThis(this)'>[+]</a>".$v['attr_name']."</label>
+		<div class='formControls col-xs-8 col-sm-9'> <span class='select-box' style='width:150px;'>
+			<select class='select' name='attr[".$v['id']."][]' size='1'>";
+				foreach($attr_values as $vv){
+					echo "<option value='".$vv."'>".$vv."</option>";
+				}
+			echo "</select></span> </div></div>";
+		}
+
+	}else{
+		//唯一属性
+		if($v['attr_input_type']==0){
+			//生成一个input框
+			echo "<div class='row cl'>
+					<label class='form-label col-xs-4 col-sm-2'>".$v['attr_name']."</label>
+					<div class='formControls col-xs-8 col-sm-9'>
+						<input type='text' class='input-text' value='' id='' name='attr[".$v['id']."][]' >
+					</div>
+				</div>";
+		}else {
+			//生成一个select框
+			//生成一个select框
+			//取出列表值
+			$attr_values = explode(',',$v['attr_value']);
+			echo "<div class='row cl'>
+		<label class='form-label col-xs-4 col-sm-2'>".$v['attr_name']."</label>
+		<div class='formControls col-xs-8 col-sm-9'> <span class='select-box' style='width:150px;'>
+			<select class='select' name='attr[".$v['id']."][]' size='1'>";
+				foreach($attr_values as $vv){
+					echo "<option value='".$vv."'>".$vv."</option>";
+				}
+			echo "</select></span> </div></div>";
+		}
+	}
+}
+
+?>
+<script type="text/javascript">
+	function cloneThis(o){
+		//获取当前行
+		var curr_div = $(o).parent().parent();
+		//取出当前标签里面的值，根据值判断是删除还是增加
+		if($(o).html()=='[+]'){
+			//完成自我复制
+			var new_div = curr_div.clone();
+			// 把新行里面的 '[+]',变成'[-]'
+			new_div.find('a').html('[-]');
+			//把新行放到当前行的后面
+			curr_div.after(new_div);
+		}else {
+			//当前行，自我删除，
+			curr_div.remove();
+		}
+	}
+</script>

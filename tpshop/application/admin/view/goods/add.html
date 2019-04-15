@@ -1,0 +1,316 @@
+﻿<!--_meta 作为公共模版分离出去-->
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<link rel="Bookmark" href="/favicon.ico" >
+<link rel="Shortcut Icon" href="/favicon.ico" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="__ADMIN__/lib/html5shiv.js"></script>
+<script type="text/javascript" src="__ADMIN__/lib/respond.min.js"></script>
+<![endif]-->
+<link rel="stylesheet" type="text/css" href="__ADMIN__/static/h-ui/css/H-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="__ADMIN__/static/h-ui.admin/css/H-ui.admin.css" />
+<link rel="stylesheet" type="text/css" href="__ADMIN__/lib/Hui-iconfont/1.0.8/iconfont.css" />
+<link rel="stylesheet" type="text/css" href="__ADMIN__/static/h-ui.admin/skin/default/skin.css" id="skin" />
+<link rel="stylesheet" type="text/css" href="__ADMIN__/static/h-ui.admin/css/style.css" />
+<link href="__ADMIN__/lib/webuploader/0.1.5/webuploader.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="__ADMIN__/ueditor/ueditor.config.js"></script> 
+<script type="text/javascript" src="__ADMIN__/ueditor/ueditor.all.min.js"></script> 
+<script type="text/javascript" src="__ADMIN__/ueditor/lang/zh-cn/zh-cn.js"></script>
+
+<!--[if IE 6]>
+<script type="text/javascript" src="__ADMIN__/lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<!--/meta 作为公共模版分离出去-->
+
+<title>基本设置</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
+	<span class="c-gray en">&gt;</span>
+	系统管理
+	<span class="c-gray en">&gt;</span>
+	基本设置
+	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<div class="page-container">
+	<form class="form form-horizontal" id="form-article-add">
+		<div id="tab-system" class="HuiTab">
+			<div class="tabBar cl">
+				<span>基本信息</span>
+				<span>扩展信息</span>
+				<span>商品属性</span>
+				<span>商品详情</span>
+			</div>
+			<div class="tabCon">
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2">
+						<span class="c-red">*</span>
+						商品名称：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" name="goods_name" id="website-title" placeholder="" value="" class="input-text">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2">所属栏目：</label>
+					<div class="formControls col-xs-8 col-sm-9"> <span class="select-box" style="width:150px;">
+						<select class="select" name="cat_id" size="1">
+							<option value="0">选择栏目</option>
+							{foreach $catedata as $v}
+							<option value="{$v.id}">{:str_repeat('--',$v['lev'])}{$v.cate_name}</option>
+							{/foreach}
+						</select>
+						</span> 
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2">
+						<span class="c-red">*</span>
+						本店价格：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" name="shop_price" id="website-title" placeholder="" value="" class="input-text">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2">
+						<span class="c-red">*</span>
+						市场价格：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" name="market_price" id="website-title" placeholder="" value="" class="input-text">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2">
+						<span class="c-red">*</span>
+						商品库存：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" name="goods_number" id="website-title" placeholder="" value="" class="input-text">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2">
+						<span class="c-red">*</span>
+						商品图片：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<div id="fileList" class="uploader-list" style="margin-bottom: 10px;"></div>
+						<div id="filePicker">选择图片</div>
+						<input type="hidden" name="goods_ori" id="goods_ori" />
+						<input type="hidden" name="goods_thumb" id="goods_thumb" />
+						<input type="hidden" name="goods_img" id="goods_img" />
+					</div>
+				</div>
+				
+			</div>
+			<div class="tabCon">
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>是否精品：</label>
+					<div class="formControls col-xs-8 col-sm-9 skin-minimal">
+						<div class="radio-box">
+							<input name="is_best" type="radio" id="sex-1" checked value="1">
+							<label for="sex-1">是</label>
+						</div>
+						<div class="radio-box">
+							<input type="radio" id="sex-2" name="is_best" value="0">
+							<label for="sex-2">否</label>
+						</div>
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>是否热卖：</label>
+					<div class="formControls col-xs-8 col-sm-9 skin-minimal">
+						<div class="radio-box">
+							<input name="is_hot" type="radio" id="sex-3" checked value="1">
+							<label for="sex-3">是</label>
+						</div>
+						<div class="radio-box">
+							<input type="radio" id="sex-4" name="is_hot" value="0">
+							<label for="sex-4">否</label>
+						</div>
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>是否新品：</label>
+					<div class="formControls col-xs-8 col-sm-9 skin-minimal">
+						<div class="radio-box">
+							<input name="is_new" type="radio" id="sex-5" checked value="1">
+							<label for="sex-5">是</label>
+						</div>
+						<div class="radio-box">
+							<input type="radio" id="sex-6" name="is_new" value="0">
+							<label for="sex-6">否</label>
+						</div>
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>简短描述：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<textarea class="textarea" name="goods_desc" id=""></textarea>
+					</div>
+				</div>
+			</div>
+			<div class="tabCon">
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2"></label>
+					<div class="formControls col-xs-8 col-sm-9"> <span class="select-box" style="width:150px;">
+						<select class="select" id="goods_type_id" name="goods_type_id" onchange="show_attr()"  size="1">
+							<option value="0">选择商品类型</option>
+							{foreach :get_type_info() as $v}
+							<option value="{$v.id}">{$v.type_name}</option>
+							{/foreach}
+						</select>
+						</span> </div>
+				</div>
+				<div id="showattr">
+					
+				</div>
+			</div>
+			<div class="tabCon">
+				<textarea  name="goods_intro" id="goods_intro" style="height: 400px;"></textarea>
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+				<button onClick="article_save_submit();" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+				<button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+			</div>
+		</div>
+	</form>
+</div>
+
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="__ADMIN__/lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="__ADMIN__/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="__ADMIN__/static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="__ADMIN__/static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__ADMIN__/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="__ADMIN__/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__ADMIN__/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__ADMIN__/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript" src="__ADMIN__/lib/webuploader/0.1.5/webuploader.min.js"></script> 
+
+<script type="text/javascript">
+UE.getEditor('goods_intro',{
+	toolbars: [[
+            'fullscreen', 'source', '|', 'undo', 'redo', '|',
+            'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
+            'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
+            'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|',
+            'directionalityltr', 'directionalityrtl', 'indent'
+        ]]
+});
+//定义商品类型的onchange事件
+function   show_attr(){
+	//根据商品类型的id，获取商品类型的属性信息；
+	//使用ajax来请求
+	//获取商品类型的id
+	var type_id = $("#goods_type_id").val();
+	//alert(type_id);
+	$.ajax({
+		type:'get',
+		url:'/admin/attribute/getAttributeByType',
+		data:{type_id:type_id},
+		success:function(msg){
+			//返回 值就是根据属性信息，生成的表单；
+			$("#showattr").html(msg);
+		}
+	});
+}
+
+
+$(function(){
+	$('.skin-minimal input').iCheck({
+		checkboxClass: 'icheckbox-blue',
+		radioClass: 'iradio-blue',
+		increaseArea: '20%'
+	});
+	//用于实现上传按钮操作的，
+	var uploader = WebUploader.create({
+		//选择上传文件后，立即开始上传；
+		auto: true,
+		//加载一个插件文件
+		swf: '__ADMIN__/lib/webuploader/0.1.5/Uploader.swf',
+		// 指定一个文件，用于处理上传的图片文件
+		server: "{:url('admin/goods/upimage')}",
+		// 选择文件的按钮。可选。
+		// 把id=filePicker 元素制作成上传按钮
+		pick: '#filePicker',
+		// 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
+		resize: false,
+		// 只允许选择图片文件。
+		accept: {
+			title: 'Images',
+			extensions: 'gif,jpg,jpeg,bmp,png',
+			mimeTypes: 'image/*'
+		}
+	});
+	//上传图片成功后，处理的回调函数；
+	uploader.on( 'uploadSuccess', function( file,data) {
+		//data参数数据就是控制器里面返回的数据
+		//alert(data.goods_thumb);
+		//制作一个img标签，嵌入到如下容器里面；
+		var imags = "<img src='"+data.goods_thumb+"' width='100' />";
+		$("#fileList").html(imags);
+		//把返回的图片路径加到隐藏里面；
+		$("#goods_thumb").val(data.goods_thumb);
+		$("#goods_img").val(data.goods_img);
+		$("#goods_ori").val(data.goods_ori);
+		//添加一个提示，表示上传完毕
+		layer.msg('上传完成',{icon:6,time:1000});
+		//$( '#'+file.id ).addClass('upload-state-success').find(".state").text("已上传");
+	});
+
+
+
+
+
+
+
+	//完成ajax表单提交
+	$("#form-article-add").submit(function(e){
+		//阻止表单的默认行为
+		e.preventDefault();
+		//获取表单里面输入的数据
+		var data = $(this).serialize();
+		$.ajax({
+			type:'post',
+			url:"{:url('admin/goods/add')}",
+			data:data,
+			success:function(msg){
+				if(msg.info==1){
+					//入库成功
+					layer.alert('添加成功',function(){
+						//重新刷新父窗口
+						parent.window.location.href = parent.window.location.href;
+						//关闭添加窗口
+						layer_close();
+					});
+
+				}else {
+					//输出错误提示
+					layer.msg('添加失败:'+msg.error,{icon:5,time:3000});
+				}
+			}
+
+		});
+	});
+
+
+
+
+	$("#tab-system").Huitab({
+		index:0
+	});
+});
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

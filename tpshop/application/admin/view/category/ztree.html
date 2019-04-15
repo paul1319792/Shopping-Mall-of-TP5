@@ -1,0 +1,160 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="__ADMIN__/lib/html5shiv.js"></script>
+<script type="text/javascript" src="__ADMIN__/lib/respond.min.js"></script>
+<![endif]-->
+<link href="__ADMIN__/lib/Hui-iconfont/1.0.8/iconfont.css" rel="stylesheet" type="text/css" />
+<link href="__ADMIN__/static/h-ui/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+<link href="__ADMIN__/static/h-ui.admin/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="__ADMIN__/zTree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<script type="text/javascript" src="__ADMIN__/lib/jquery/1.9.1/jquery.min.js"></script> 
+<script type="text/javascript" src="__ADMIN__/zTree/js/jquery.ztree.all.min.js"></script>
+<style type="text/css">
+.ztree li span.button.add {margin-left:2px; margin-right: -1px; background-position:-144px 0; vertical-align:top; *vertical-align:middle}
+</style>
+
+
+<script type="text/javascript">
+	//ztree的配置
+	var setting = {
+			view: {
+				showLine: false,
+				addHoverDom: addHoverDom,
+				removeHoverDom: removeHoverDom,
+			},
+			edit: {
+				enable: true,
+				removeTitle: "删除节点",
+				showRemoveBtn: setRemoveBtn,
+				showRenameBtn: true,
+				renameTitle: "编辑节点",
+				editNameSelectAll: true
+			},
+			data: {
+				key: {
+					name: "cate_name"
+				},
+				simpleData: {
+					enable: true,
+					idKey: "id",
+					pIdKey: "parent_id",
+				}
+			},
+			callback: {
+				beforeRemove: zTreeBeforeRemove,
+				onRemove: zTreeOnRemove,
+				onRename: zTreeOnRename
+			}
+	};
+	//添加栏目节点，给当前节点后面添加‘添加节点’ 的按钮
+	function addHoverDom(treeId, treeNode) {
+			var sObj = $("#" + treeNode.tId + "_span");//获取当前节点
+			if (treeNode.editNameFlag || $("#addBtn_"+treeNode.tId).length>0) return;
+			//创建一个添加按钮
+			var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
+				+ "' title='add node' onfocus='this.blur();'></span>";
+			sObj.after(addStr);//把添加按钮放到当前节点的后面
+			var btn = $("#addBtn_"+treeNode.tId);
+			//给添加的按钮绑定单击事件
+			if (btn) btn.bind("click", function(){
+				//判断当前节点的level值是否大于1
+				if(treeNode.level>1){
+						alert('节点级别不能超过3个');
+						return false;
+				}
+				var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+				//创建的新节点，处于编辑状态；
+				var sons = zTree.addNodes(treeNode, {id:0, parent_id:treeNode.id, cate_name:"新节点"});
+				//console.log(sons[0]);
+				zTree.editName(sons[0]);//让新节点处于编辑状态
+				return false;
+			});
+		};
+	//鼠标离开时，给'添加按钮'  解除绑定，并删除
+	function removeHoverDom(treeId, treeNode) {
+			$("#addBtn_"+treeNode.tId).unbind().remove();
+	};
+
+
+
+
+	//修改节点时，触发的回调函数；
+	//可以通过该函数，完成修改和新增节点
+	function zTreeOnRename(event, treeId, treeNode, isCancel) {
+		//alert(treeNode.tId + ", " + treeNode.name);
+		$.ajax({
+			type:'post',
+			url:'/admin/category/ztreeupdate',
+			data:{id:treeNode.id,cate_name:treeNode.cate_name,parent_id:treeNode.parent_id},
+			success:function(msg){
+				if(msg.info==1){
+					treeNode.id = msg.id;//把新节点的 id,更新真实的id;
+					alert('success!');
+				}
+			}
+		});
+
+	}
+	//删除节点确定后，要执行的回调函数
+	function zTreeOnRemove(event, treeId, treeNode) {
+		//treeNode  表示当前节点；
+		//alert(treeNode.tId + ", " + treeNode.name);
+		$.ajax({
+			type:'post',
+			url:'/admin/category/ztreedel',
+			data:{id:treeNode.id},
+			success:function(msg){
+				if(msg.info==1){
+					alert('success!');
+				}
+			}
+		});
+
+	}
+	//该函数，用于删除之前的一个判断，提示信息，是否真的要删除
+	function zTreeBeforeRemove(treeId, treeNode) {
+		if(!window.confirm('你真的要删除吗?')){
+			//单击l了取消按钮；
+			return false;//删除操作取消；
+		}
+		
+	}
+
+
+
+	//该函数，判断是否是父节点
+	function setRemoveBtn(treeId, treeNode) {
+		//通过节点中添加一个isParent属性来判断是否是父节点；
+		//treeNode 该参数表示当前节点；
+		console.log(treeNode);
+		//如果是父节点，就不显示删除按钮
+		return !treeNode.isParent;
+	}
+	$(document).ready(function(){
+		//通过ajax请求，获取栏目数据，载入到ztree树里面；
+		$.ajax({
+			type:'get',
+			url:'/admin/category/getTreeCategory',
+			dataType:'json',
+			success:function(msg){
+				$.fn.zTree.init($("#treeDemo"), setting, msg);
+			}
+		});
+		
+	});
+</script>
+<title>栏目页面</title>
+</head>
+<body>
+<div class="zTreeDemoBackground left">
+		<ul id="treeDemo" class="ztree"></ul>
+</div>
+</body>
+</html>
